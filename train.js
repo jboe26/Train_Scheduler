@@ -1,68 +1,85 @@
-$( document ).ready(function() {
-    console.log( "ready!" );
+$(document).ready(function () {
+    console.log("ready!");
 
-    // Assumptions
-    var tFrequency = 3;
+    var firebaseConfig = {
+        apiKey: "AIzaSyCL_OGlx7TJ3VZAWu9CPKxtJN4SbO8-FVE",
+        authDomain: "trainactivity-f5ce1.firebaseapp.com",
+        databaseURL: "https://trainactivity-f5ce1.firebaseio.com",
+        projectId: "trainactivity-f5ce1",
+        storageBucket: "",
+        messagingSenderId: "790957486735",
+        appId: "1:790957486735:web:d80b471655e9d187"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
 
-    // Time is 3:30 AM
-    var firstTime = "03:30";
+    //  Button for adding Trains
+    $("#submit").on("click", function (event) {
+        event.preventDefault();
 
-    // First Time (pushed back 1 year to make sure it comes before current time)
-    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
-    console.log(firstTimeConverted);
+        // A variable to reference the database.
+    var database = firebase.database();
 
-    // Current Time
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    // Variables for the onClick event
+    var name;
+    var destination;
+    var firstTrain;
+    var frequency = 0;
 
-    // Difference between the times
-    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-    console.log("DIFFERENCE IN TIME: " + diffTime);
+    $("#submit").on("click", function() {
+        event.preventDefault();
+        // Storing and retreiving new train data
+        name = $("#name-input").val().trim();
+        destination = $("#destination-input").val().trim();
+        firstTrain = $("#first-input").val().trim();
+        frequency = $("#minutes-input").val().trim();
 
-    // Time apart (remainder)
-    var tRemainder = diffTime % tFrequency;
-    console.log(tRemainder);
+        // Pushing to database
+        database.ref().push({
+            name: name,
+            destination: destination,
+            firstTrain: firstTrain,
+            frequency: frequency,
+            dateAdded: firebase.database.ServerValue.TIMESTAMP
+        });
+        $("form")[0].reset();
+    });
 
-    // Minute Until Train
-    var tMinutesTillTrain = tFrequency - tRemainder;
-    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+    database.ref().on("child_added", function(childSnapshot) {
+        var nextArr;
+        var minAway;
+        // Chang year so first train comes before now
+        var firstTrainNew = moment(childSnapshot.val().firstTrain, "hh:mm").subtract(1, "years");
+        // Difference between the current and firstTrain
+        var diffTime = moment().diff(moment(firstTrainNew), "minutes");
+        var remainder = diffTime % childSnapshot.val().frequency;
+        // Minutes until next train
+        var minAway = childSnapshot.val().frequency - remainder;
+        // Next train time
+        var nextTrain = moment().add(minAway, "minutes");
+        nextTrain = moment(nextTrain).format("hh:mm");
 
-    // Next Train
-    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+        $("#add").append("<tr><td>" + childSnapshot.val().name +
+                "</td><td>" + childSnapshot.val().destination +
+                "</td><td>" + childSnapshot.val().frequency +
+                "</td><td>" + nextTrain + 
+                "</td><td>" + minAway + "</td></tr>");
 
+            // Handle the errors
+        }, function(errorObject) {
+            console.log("Errors handled: " + errorObject.code);
+    });
+
+    database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
+        // Change the HTML to reflect
+        $("#name-display").html(snapshot.val().name);
+        $("#destination-display").html(snapshot.val().destination);
+        $("#first-display").html(snapshot.val().firstTrain);
+        $("#minutes-display").html(snapshot.val().frequency);
+    console.log(snapshot);
+    
+    });
 
 });
 
-    // Assume the following situations.
-
-    // (TEST 1)
-    // First Train of the Day is 3:00 AM
-    // Assume Train comes every 3 minutes.
-    // Assume the current time is 3:16 AM....
-    // What time would the next train be...? (Use your brain first)
-    // It would be 3:18 -- 2 minutes away
-
-    // (TEST 2)
-    // First Train of the Day is 3:00 AM
-    // Assume Train comes every 7 minutes.
-    // Assume the current time is 3:16 AM....
-    // What time would the next train be...? (Use your brain first)
-    // It would be 3:21 -- 5 minutes away
-
-
-    // ==========================================================
-
-    // Solved Mathematically
-    // Test case 1:
-    // 16 - 00 = 16
-    // 16 % 3 = 1 (Modulus is the remainder)
-    // 3 - 1 = 2 minutes away
-    // 2 + 3:16 = 3:18
-
-    // Solved Mathematically
-    // Test case 2:
-    // 16 - 00 = 16
-    // 16 % 7 = 2 (Modulus is the remainder)
-    // 7 - 2 = 5 minutes away
-    // 5 + 3:16 = 3:21
+});

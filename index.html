@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <!-- Moment JS -->
     <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/6.4.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
     <!-- Jquery CDN -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -13,25 +16,87 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- My Stylesheet -->
     <link rel="stylesheet" type="text/css" href="train.css">
+    
 
 
     <title>Train Scheduler</title>
 </head>
 
 <body>
-<div class="container">
+    <div class="container">
         <div class="jumbotron">
-                <h1 class="display-4">Anytime is Train Time!</h1>
-                <p class="lead">Choo Choo. Chee Chee.</p>
-                <hr class="my-4">
-               </div>
+            <h1 class="display-4">Anytime is Train Time!</h1>
+            <hr class="my-4">
+        </div>
+        <p><div class="current">Current Train Schedule</div></p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Train Name</th>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Frequency (min)</th>
+                    <th scope="col">Next Arrival</th>
+                    <th scope="col">Minutes Away</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                
+            </tbody>
+        </table>
+        <p><div class="add">Add Train</div></p>
+        
+        <form class="table new-values-table" id="form-input">
+            <div class="form-group">
+                <label>Train Name</label>
+                <input type="train" class="form-control" id="name-input">
+            </div>
+            <div class="form-group">
+                <label>Destination</label>
+                <input type="destination" class="form-control" id="destination-input">
+            </div>
+            <div class="form-group">
+                <label>First Train Time</label>
+                <input type="firsttime" class="form-control" id="first-input">
+            </div>
+            <div class="form-group">
+                <label>Frequency (min)</label>
+                <input type="minutes" class="form-control" id="minutes-input">
+            </div>
+            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+        </form>
 
 
 
 
-
-
-</div>
+    </div>
     <script src="train.js"></script>
 </body>
 

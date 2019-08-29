@@ -1,0 +1,24 @@
+.table {
+    border: lightblue solid 4px;
+    margin: auto;
+}
+
+.current, .add {
+    background-color: burlywood;
+    color: white;
+    text-align: center;
+}
+
+.add {
+    padding: 2px;
+}
+
+#submit {
+    background-color: lightblue;
+    color: white;
+}
+
+.jumbotron {
+    background-color: burlywood;
+    text-align: center;
+}
