@@ -13,9 +13,9 @@ $(document).ready(function () {
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
-    //  Button for adding Trains
-    $("#submit").on("click", function (event) {
-        event.preventDefault();
+    // //  Button for adding Trains
+    // $("#submit").on("click", function (event) {
+    //     event.preventDefault();
 
         // A variable to reference the database.
     var database = firebase.database();
@@ -82,4 +82,3 @@ $(document).ready(function () {
 
 });
 
-});
