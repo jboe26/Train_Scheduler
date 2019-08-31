@@ -17,7 +17,7 @@ $(document).ready(function () {
     // $("#submit").on("click", function (event) {
     //     event.preventDefault();
 
-        // A variable to reference the database.
+    // A variable to reference the database.
     var database = firebase.database();
 
     // Variables for the onClick event
@@ -26,7 +26,11 @@ $(document).ready(function () {
     var firstTrain;
     var frequency = 0;
 
-    $("#submit").on("click", function() {
+    var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes();
+    $("#currentTime").text("Current Time: " + time)
+
+    $("#submit").on("click", function () {
         event.preventDefault();
         // Storing and retreiving new train data
         name = $("#name-input").val().trim();
@@ -45,7 +49,7 @@ $(document).ready(function () {
         $("form")[0].reset();
     });
 
-    database.ref().on("child_added", function(childSnapshot) {
+    database.ref().on("child_added", function (childSnapshot) {
         var nextArr;
         var minAway;
         // Chang year so first train comes before now
@@ -60,24 +64,24 @@ $(document).ready(function () {
         nextTrain = moment(nextTrain).format("hh:mm");
 
         $(".table").append("<tr><td>" + childSnapshot.val().name +
-                "</td><td>" + childSnapshot.val().destination +
-                "</td><td>" + childSnapshot.val().frequency +
-                "</td><td>" + nextTrain + 
-                "</td><td>" + minAway + "</td></tr>");
+            "</td><td>" + childSnapshot.val().destination +
+            "</td><td>" + childSnapshot.val().frequency +
+            "</td><td>" + nextTrain +
+            "</td><td>" + minAway + "</td></tr>");
 
-            // Handle the errors
-        }, function(errorObject) {
-            console.log("Errors handled: " + errorObject.code);
+        // Handle the errors
+    }, function (errorObject) {
+        console.log("Errors handled: " + errorObject.code);
     });
 
-    database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
+    database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
         // Change the HTML to reflect
         $("#name-display").html(snapshot.val().name);
         $("#destination-display").html(snapshot.val().destination);
         $("#first-display").html(snapshot.val().firstTrain);
         $("#minutes-display").html(snapshot.val().frequency);
-    console.log(snapshot);
-    
+        console.log(snapshot);
+
     });
 
 });
