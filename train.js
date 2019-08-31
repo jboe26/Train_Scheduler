@@ -59,7 +59,7 @@ $(document).ready(function () {
         var nextTrain = moment().add(minAway, "minutes");
         nextTrain = moment(nextTrain).format("hh:mm");
 
-        $("#add").append("<tr><td>" + childSnapshot.val().name +
+        $(".table").append("<tr><td>" + childSnapshot.val().name +
                 "</td><td>" + childSnapshot.val().destination +
                 "</td><td>" + childSnapshot.val().frequency +
                 "</td><td>" + nextTrain + 
