@@ -26,8 +26,9 @@ $(document).ready(function () {
     var firstTrain;
     var frequency = 0;
 
-    var today = new Date();
-    var time = today.getHours() + ":" + today.getMinutes();
+    // var today = new Date();
+    // var time = today.getHours() + ":" + today.getMinutes();
+    var time = moment().format('h:mm A');
     $("#currentTime").text("Current Time: " + time)
 
     $("#submit").on("click", function () {
